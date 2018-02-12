@@ -9,11 +9,18 @@ highestMatchCount = 0
 listOfRandoms = []
 runCount = 0
 goodGenes = []
+possibleIndexesToChange = []
 matches = []
 match = True
+generationSize = 20
 
 while highestMatchCount != len(goal):
-    for i in range(0, 20):
+    
+    #index choices setup
+    for i in range(0, len(goal)):
+        possibleIndexesToChange.append(i)
+    
+    for i in range(0, generationSize):
         time.sleep(0.05)
         if runCount == 0:
             #initial builder
@@ -24,7 +31,6 @@ while highestMatchCount != len(goal):
         
             randomString = ''.join(randomList)
             listOfRandoms.append(randomString)
-            print("Randomly produced strings: " + ', '.join(str(v) for v in listOfRandoms))
             #tester
             zipped = list(zip(randomString, goal))
             highestMatch = randomString
@@ -34,7 +40,10 @@ while highestMatchCount != len(goal):
         else:
             #mutation
             while match == True:
-                index = random.randint(0, len(goal) - 1)
+                
+                #index = random.randint(0, len(goal) - 1)
+                index = random.choice(possibleIndexesToChange)
+                
                 time.sleep(0.03)
                 #print("index rolled: " + str(index))
                 if index not in matches:
@@ -45,31 +54,46 @@ while highestMatchCount != len(goal):
                     #print("In matches!")
 
             newChar = random.choice(string.ascii_letters)
-            print("index/newChar " + str(index) + str(newChar))
+            print("\nInserting " + str(newChar) + " at index " + str(index) + ",\n")
+            
             highestMatch = list(highestMatch)
-            print("highestMatch:: " + ''.join(highestMatch) )
+            #print("highestMatch:: " + ''.join(highestMatch) )
             highestMatch[index] = newChar
             #cloning
             listOfRandoms.append(highestMatch)
-            print("Randomly produced strings: " + ', '.join(str(v) for v in listOfRandoms))
+            #print("Randomly produced strings: " + ', '.join(str(v) for v in listOfRandoms))
             #tester
             zipped = list(zip(highestMatch, goal))
         
+        matchCount = 0
         for x, (i,j) in enumerate(zipped):
+            
             if i == j:
+                matchCount = matchCount + 1
                 matches.append(x)
                 print( i, '--', j)
             else:
                 print( i, '  ', j)
+            #print("Match count: " + str(matchCount))
 
         #print( '\n', matches)
-        print( '\n Match count = ',len(matches))
+        print( '\nLetter match count:', matchCount)
         
         #store new highest matched string
         if len(matches) > highestMatchCount:
-            highestMatchCount = len(matches)
+            #highestMatchCount = len(matches)
+            highestMatchCount = highestMatchCount + 1
+            
             #highestMatch = randomString
-        print("Highest match: " + ''.join(highestMatch) + " with count " + str(highestMatchCount))
+        #print("Highest match: " + ''.join(highestMatch) + " with count " + str(highestMatchCount))
+        print("Lenth of goal word: " + str(len(goal)) + "\n\n")
         listOfRandoms = []
         
+        if matchCount == len(goal):
+            print("\nCorrect spelling found!\n")
+            raise SystemExit
+
+        
     runCount = runCount + 1
+    
+    
