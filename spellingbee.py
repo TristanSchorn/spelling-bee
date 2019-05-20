@@ -12,6 +12,7 @@ possibleIndexesToChange = []
 matches = []
 match = True
 generationSize = 20
+sleepTime = 0.050
 
 while highestMatchCount != len(goal):
     #index choices setup
@@ -20,7 +21,7 @@ while highestMatchCount != len(goal):
 
     #initial builder
     for i in range(0, generationSize):
-        time.sleep(0.05)
+        time.sleep(sleepTime)
         if runCount == 0:
             randomList = []
             for i in range(len(goal)):
@@ -42,7 +43,6 @@ while highestMatchCount != len(goal):
                 index = random.choice(possibleIndexesToChange)
                 time.sleep(0.03)
                 if index not in matches:
-                    #del possibleIndexesToChange[index]
                     
                     match == False
                     break
@@ -52,6 +52,7 @@ while highestMatchCount != len(goal):
             
             highestMatch = list(highestMatch)
             highestMatch[index] = newChar
+            
             #cloning
             listOfRandoms.append(highestMatch)
             zipped = list(zip(highestMatch, goal))
@@ -61,10 +62,6 @@ while highestMatchCount != len(goal):
             if i == j:
                 matchCount = matchCount + 1
                 matches.append(x)        
-
-                print("Del: " + str(x))
-                #possibleIndexesToChange.pop(x)
-                #del possibleIndexesToChange[x]
 
                 print( i, '--', j)
             else:
